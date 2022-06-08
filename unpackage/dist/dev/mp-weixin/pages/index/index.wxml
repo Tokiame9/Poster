@@ -1,0 +1,1 @@
+<view class="mainPage"><view data-event-opts="{{[['tap',[['upLoadImg']]]]}}" class="imgBox" bindtap="__e"><view class="shu"></view><view class="heng"></view></view><view data-event-opts="{{[['tap',[['',['$event']]]]]}}" class="foot-Img" bindtap="__e"><image src="/static/footer.png" alt class="_img"></image></view></view>

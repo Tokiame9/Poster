@@ -1,0 +1,12 @@
+
+.moveImg{
+	z-index: -99;
+}
+/*每个页面公共css */
+uni-image{
+	width: 100%;
+}
+uni-page-body{
+	height: 100%;
+}
+
