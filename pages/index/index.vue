@@ -27,7 +27,7 @@
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
-			<view v-if="pageTwo" class="canvas-border"@longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd" >
+			<view v-if="pageTwo" class="canvas-border"@longtap="saveImg()"  @touchstart='start' @touchmove="move" @touchend="moveEnd" >
 				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo">
 				</canvas>
 			</view>
@@ -103,7 +103,7 @@
 			}
 		},
 		onLoad() {
-			this.test()
+			this.test()//页面加载时获取canvas容器宽高
 			let _this=this;
 			uni.getStorage({
 				key: 'guideUI',
