@@ -44,11 +44,11 @@
 	</view>
 	<img class="downLoad" src="/static/dowload.png" alt="" v-if="imgOnShow">
 	
-	<view class="foot-Img" >
+	<view class="foot-Img" v-if="pageOne">
 		<img width="100%" height="100%" src="/static/footer.png" alt="">
 		<p class="word_bottom">上海体育学院</p>
 	</view>
-	<view class="foot-ImgTwo"  v-if=false>
+	<view class="foot-ImgTwo"  v-if="pageTwo">
 		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
 			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
 		</view>
