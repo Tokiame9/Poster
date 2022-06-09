@@ -761,7 +761,7 @@ function populateParameters(result) {var _result$brand =
   // wx.getAccountInfoSync
 
   var parameters = {
-    appId: "",
+    appId: "__UNI__2558385",
     appName: "biyehaibao",
     appVersion: "1.0.0",
     appVersionCode: "100",
@@ -870,7 +870,7 @@ var getAppBaseInfo = {
     var hostLanguage = language.replace('_', '-');
 
     result = sortObject(Object.assign(result, {
-      appId: "",
+      appId: "__UNI__2558385",
       appName: "biyehaibao",
       appVersion: "1.0.0",
       appVersionCode: "100",

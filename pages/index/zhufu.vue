@@ -1,7 +1,10 @@
 <template>
-	<view class="canvas-content" @longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd">
+	<view class="canvas-content" >
 		<movable-area class="moveAre" scale-area="true" >
-			<view class="canvas-border">
+			<view class="button_back" @tap="back">
+				<p>返回</p>
+			</view>
+			<view class="canvas-border"@longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd" >
 				<canvas canvas-id="firstCanvas" @longpress="saveImg()">
 					
 				</canvas>
@@ -14,7 +17,6 @@
 		<movable-view animation="false" calss="enlarge" :style="'height:'+picWidth+'px'+';'+'width:'+picHeigth+'px;'" scale="true" @scale="scaler">
 			
 		</movable-view>
-		<p style="text-align: center;">长按保存图片</p>
 		</movable-area>
 		
 		<view class="foot-Img" @tap="">
@@ -68,6 +70,11 @@
 			this.drawImg();
 		},
 		methods: {
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
 			switchImg(src){
 				this.saveIf=false;
 				this.imgSrc2=src;
@@ -224,8 +231,26 @@
 </script>
 
 <style>
+	.button_back{
+		z-index: 999;
+		width:70px;
+		height: 40px;
+		background-color: #ffe0cc;
+		position: absolute;
+		left: 0;
+		top: 80px;
+		border-top-right-radius: 25px;
+		border-bottom-right-radius: 25px;
+		border-left: 0px;
+		border: 2px solid #fff;
+	}
+	.button_back p{
+		margin-left: 10px;
+		line-height: 40px;
+	}
 	.canvas-border{
-		margin: 0 auto;
+		
+		margin: 60px auto;
 		height: 567px;
 		width: 319px;
 	}
@@ -241,7 +266,7 @@
 		left: 0;
 		right: 0;
 	}
-	.foot-Img{
+	.foot-ImgTwo{
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
@@ -250,7 +275,7 @@
 		border-top: 3px solid #ffe0cc;
 		position: fixed;
 		bottom: 0;
-		height: 120px;
+		height: 80px;
 		width: 100%;
 	}
 	.moveImg{
@@ -278,7 +303,7 @@
 		width: 100%;
 		height: 100%;
 	}
-	.imgBox{
+	.imgBox_pre{
 		width: 70px;
 		height: 70px;
 	}

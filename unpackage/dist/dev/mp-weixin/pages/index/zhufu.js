@@ -157,6 +157,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 var _default =
 {
   data: function data() {
@@ -200,6 +202,11 @@ var _default =
     this.drawImg();
   },
   methods: {
+    back: function back() {
+      uni.navigateBack({
+        delta: 1 });
+
+    },
     switchImg: function switchImg(src) {
       this.saveIf = false;
       this.imgSrc2 = src;
