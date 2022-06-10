@@ -1,5 +1,4 @@
 <template>
-	
 <view class="mainPage">
 	
 	<view class="coverLayer" v-if="guideOnShow" @tap="hideImg">
@@ -10,6 +9,9 @@
 	</view>
 	<view class="button_save" @tap="saveImg()" v-if="pageTwo">
 		<p v-if="pageTwo">完成</p>
+	</view>
+	<view class="sign_border"  v-if="pageTwo">
+		<p v-if="pageTwo">相框</p>
 	</view>
 	<view class="imgBox" >
 		<img v-if="imgOnShow" class="imgResult" :src="imgPath" alt="" @longpress="savePngImg" @tap.stop="hideImg">
@@ -27,8 +29,8 @@
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
-			<view v-if="pageTwo" class="canvas-border"@longtap="saveImg()"  @touchstart='start' @touchmove="move" @touchend="moveEnd" >
-				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo">
+			<view v-if="pageTwo" class="canvas-border"@longtap.stop="saveImg()"  @touchstart.stop='start' @touchmove.stop="move" @touchend="moveEnd" >
+				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo" disable-scroll="true">
 				</canvas>
 			</view>
 		
@@ -44,13 +46,15 @@
 	</view>
 	<img class="downLoad" src="/static/dowload.png" alt="" v-if="imgOnShow">
 	
-	<view class="foot-Img" v-if="pageOne">
+	<view class="foot-Img" v-if="pageThree">
 		<img width="100%" height="100%" src="/static/footer.png" alt="">
 		<p class="word_bottom">上海体育学院</p>
 	</view>
 	<view class="foot-ImgTwo"  v-if="pageTwo">
+		<view class="scroll_box">
 		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
 			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
+		</view>
 		</view>
 	</view>
 </view>
@@ -65,7 +69,7 @@
 				imgPath:'',
 				pageOne:true,
 				pageTwo:false,
-				pageThree:false,
+				pageThree:true,
 				boxWidth:0,
 				boxHeight:0,
 				imgSrc:'',
@@ -77,6 +81,29 @@
 					{
 						preImg:'/static/pre_border/2.png',
 						srcImg:'/static/2.png'
+					},
+					{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
+					},
+					{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
+					},
+					{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
+					},{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
+					},
+					{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
+					},
+					{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
 					},
 					{
 						preImg:'/static/pre_border/3.png',
@@ -103,6 +130,10 @@
 			}
 		},
 		onLoad() {
+			// document.body.addEventListener('touchmove',function(e){
+			// 	e.preventDefault();
+			// },{passive:false});
+			this.noPullDown(".foot-ImgTwo")
 			this.test()//页面加载时获取canvas容器宽高
 			let _this=this;
 			uni.getStorage({
@@ -114,12 +145,26 @@
 			});
 		},
 		methods: {
+			noPullDown(selector) {
+			    //禁止页面拖动
+			    document.querySelector('body').addEventListener('touchmove', function (e) {
+			        if(!selector) {
+			            e.preventDefault()
+			        } else {
+			            // 如果需要部分区域可以滑动，则需传入需要滑动地方的类名
+			            if (!document.querySelector(selector).contains(e.target)) {
+			                e.preventDefault()
+			            }
+			        }
+			    }, { passive: false })
+			},
 			
 			back(){
 				this.pageTwo=false;
 				this.pageOne=true;
 				this.imgOnShow=false;
 				this.saveIf=true;
+				this.pageThree=true;
 				
 			},
 			switchImg(src){
@@ -144,6 +189,11 @@
 			},
 			//移动时记录相对差值
 			move(e){
+				e.preventDefault();
+				e.stopPropagation();
+				// document.body.addEventListener('touchmove',function(e){
+				// 	e.preventDefault();
+				// },{passive:false});
 				if(this.saveIf){
 				let touch= e.touches[0]
 				this.offSetX=(touch["pageX"]-this.posStartX)/1.3;
@@ -294,6 +344,7 @@
 						that.imgPath=res.tempFilePath;
 						that.imgOnShow=true;
 						that.saveIf=true;
+						that.pageThree=true;
 						if(type=="app"||type=="web"){
 							// var oA = document.createElement("a");
 							// oA.download = ''; // 设置下载的文件名，默认是'下载'
@@ -423,6 +474,7 @@
 						_this.pageTwo=true;
 						_this.pageOne=false;
 						_this.guideOnShow=true;
+						_this.pageThree=false;
 						uni.getStorage({
 							key: 'guideUI',
 							success: function (res) {
@@ -440,6 +492,11 @@
 </script>
 
 <style>
+	.scroll_box{
+		display: flex;
+		flex-direction: row;
+		
+	}
 	.imgGui{
 		position: absolute;
 		z-index: 99999;
@@ -604,6 +661,28 @@ left: 0;
 				margin-left: 10px;
 				line-height: 40px;
 			}
+			.sign_border p{
+				font-size: 2.5vh;
+				line-height: 5.6vh;
+				text-align: center;
+				font-weight: 900;
+				text-shadow: #f1d272 1px 0 0, #f1d272 0 1px 0, #f1d272 -1px 0 0, #f1d272 0 -1px 0;
+			}
+			.sign_border{
+					color: #000;
+						z-index: 1;
+						width:70px;
+						height: 5.6vh;
+						background-color: #feebed;
+						position: absolute;
+						left: 0;
+						bottom: 100px;
+						border-top-left-radius: 15px;
+						border-top-right-radius: 15px;
+						border: 4px solid #f1d272;
+						border-bottom: none;
+					
+			}
 		.canvas-border{
 			
 			margin: 0 auto;
@@ -624,15 +703,15 @@ left: 0;
 			right: 0;
 		}
 		.foot-ImgTwo{
+			overflow: auto;
 			display: flex;
 			flex-direction: row;
-			justify-content: space-around;
 			align-items: center;
 			background-color: #feebed;
-			border-top: 3px solid #ffe0cc;
+			border-top: 5.6vh solid #ffe0cc;
 			position: fixed;
 			bottom: 0;
-			height: 80px;
+			height: 100px;
 			width: 100%;
 		}
 		.moveImg{
@@ -662,6 +741,7 @@ left: 0;
 			height: 100%;
 		}
 		.imgBox_pre{
+			margin-left: 40px;
 			width: 70px;
 			height: 70px;
 		}
