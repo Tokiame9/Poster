@@ -210,8 +210,8 @@
 				// },{passive:false});
 				if(this.saveIf){
 				let touch= e.touches[0]
-				this.offSetX=(touch["pageX"]-this.posStartX)/1.3;
-				this.offSetY=(touch["pageY"]-this.posStartY)/1.3;
+				this.offSetX=(touch["pageX"]-this.posStartX);
+				this.offSetY=(touch["pageY"]-this.posStartY);
 				this.posX=this.startPosX+this.offSetX;
 				this.posY=this.startPosY+this.offSetY;
 				this.drawImg()
@@ -233,6 +233,7 @@
 			drawImg(){
 				let _this=this
 				var canvas= uni.createCanvasContext("firstCanvas")
+				
 				uni.getImageInfo({
 					src:_this.imgSrc2,
 					success:function(res){
@@ -260,6 +261,7 @@
 												// 	width:this.picWidth+'px',
 												// 	height:this.picHeigth+'px'
 												// }
+												canvas.clearRect(0,0,_this.boxWidth,_this.boxHeight)
 												canvas.setFillStyle('#fff')
 												canvas.fillRect(0,0,deviceW,deviceH)
 												canvas.drawImage(_this.imgSrc1,0,0,srcW1,srcH1,_this.posX,_this.posY,srcW_p1*_this.scaleSize,srcH_p1*_this.scaleSize)
