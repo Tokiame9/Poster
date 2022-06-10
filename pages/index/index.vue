@@ -13,7 +13,7 @@
 	<view class="sign_border"  v-if="pageTwo">
 		<p v-if="pageTwo">相框</p>
 	</view>
-	<view class="imgBox" >
+	<view class="imgBox" :class="{'imgBox_mp':IfmpPro}">
 		<img v-if="imgOnShow" class="imgResult" :src="imgPath" alt="" @longpress="savePngImg" @tap.stop="hideImg">
 		<view class="pageOne" v-if="pageOne" @tap="upLoadImg()">
 			<img class="imgGui" src="/static/uploadGui.png" alt="" v-if="guideOnShow" @tap.stop="hideImg">
@@ -52,7 +52,7 @@
 	</view>
 	<view class="foot-ImgTwo"  v-if="pageTwo">
 		<view class="scroll_box">
-		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
+		<view v-for="item in imgBox" :key="item.id" class="imgBox_pre">
 			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
 		</view>
 		</view>
@@ -64,6 +64,7 @@
 	export default {
 		data() {
 			return {
+				IfmpPro:false,
 				guideOnShow:true,
 				imgOnShow:false,
 				imgPath:'',
@@ -75,37 +76,46 @@
 				imgSrc:'',
 				imgBox:[
 					{
+						id:1,
 						preImg:'/static/pre_border/1.png',
 						srcImg:'/static/1.png'
 					},
 					{
+						id:2,
 						preImg:'/static/pre_border/2.png',
 						srcImg:'/static/2.png'
 					},
 					{
+						id:3,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					},
 					{
+						id:4,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					},
 					{
+						id:5,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					},{
+						id:6,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					},
 					{
+						id:7,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					},
 					{
+						id:8,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					},
 					{
+						id:9,
 						preImg:'/static/pre_border/3.png',
 						srcImg:'/static/3.png'
 					}
@@ -133,12 +143,16 @@
 			// document.body.addEventListener('touchmove',function(e){
 			// 	e.preventDefault();
 			// },{passive:false});
-			this.noPullDown(".foot-ImgTwo")
-			this.test()//页面加载时获取canvas容器宽高
+			// this.noPullDown(".foot-ImgTwo")
+			const type = uni.getSystemInfoSync().uniPlatform
+			if (type=="mp-weixin"){
+				this.IfmpPro=true;
+			}
 			let _this=this;
 			uni.getStorage({
 				key: 'guideUI',
 				success: function (res) {
+					_this.test()//页面加载时获取canvas容器宽高
 					_this.guideOnShow=false;
 					console.log('123')
 				}
@@ -475,12 +489,14 @@
 						_this.pageOne=false;
 						_this.guideOnShow=true;
 						_this.pageThree=false;
+						_this.drawImg()
 						uni.getStorage({
 							key: 'guideUI',
 							success: function (res) {
 								_this.guideOnShow=false;
 								console.log('123')
-							}
+							},
+							
 						});
 						
 						_this.drawImg()
@@ -512,7 +528,7 @@
 		position: absolute;
 		left: 50%;
 		transform: translate(-70px,0);
-		bottom: 10%;
+		bottom: 9%;
 	}
 	.downLoad image{
 		
@@ -594,6 +610,15 @@ left: 0;
 		border-radius: 6px;
 		width: 44.218vh;
 		height: 76.61vh;
+		background-color: #fff;
+	}
+	.imgBox_mp{
+		position: relative;
+		top: 9%;
+		margin: 0 auto;
+		border-radius: 6px;
+		width: 40.218vh;
+		height: 68.61vh;
 		background-color: #fff;
 	}
 
