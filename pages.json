@@ -3,12 +3,11 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-<<<<<<< Updated upstream
-				"navigationBarTitleText": "uni-app"
-=======
+
+				"navigationBarTitleText": "uni-app",
 				"navigationBarTitleText": "毕业海报合成",
 				"allowsBounceVertical": "NO"
->>>>>>> Stashed changes
+
 			}
 		}
 	    ,{

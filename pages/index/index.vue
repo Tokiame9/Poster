@@ -1,16 +1,34 @@
 <template>
+	
 <view class="mainPage">
-	<view class="imgBox" @tap="upLoadImg()">
-		<view class="shu">
+	
+	<view class="coverLayer" v-if="guideOnShow" @tap="hideImg">
+		
+	</view>
+	<view class="button_back" @tap="back" v-if="pageTwo">
+		<p v-if="pageTwo">返回</p>
+	</view>
+	<view class="button_save" @tap="saveImg()" v-if="pageTwo">
+		<p v-if="pageTwo">完成</p>
+	</view>
+	<view class="imgBox" >
+		<img v-if="imgOnShow" class="imgResult" :src="imgPath" alt="" @longpress="savePngImg" @tap.stop="hideImg">
+		<view class="pageOne" v-if="pageOne" @tap="upLoadImg()">
+			<img class="imgGui" src="/static/uploadGui.png" alt="" v-if="guideOnShow" @tap.stop="hideImg">
+			
+			<view class="shu" v-if="!imgOnShow">
+			</view>
+			<view class="heng" v-if="!imgOnShow">
+				
+			</view>
+			<view class="word" @click="test" v-if="pageOne">
+			</view>
 		</view>
-<<<<<<< Updated upstream
-		<view class="heng">
-=======
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
-			<view v-if="pageTwo" class="canvas-border"@longtap.stop="saveImg()"  @touchstart.stop='start' @touchmove.stop="move" @touchend="moveEnd" >
-				<canvas style="background-color: #000;" canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo" disable-scroll="true">
+			<view v-if="pageTwo" class="canvas-border"@longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd" >
+				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo">
 				</canvas>
 			</view>
 		
@@ -19,24 +37,30 @@
 		</movable-view> -->
 		
 		<movable-view v-if="pageTwo" animation="false" calss="enlarge" :style="'height:'+picWidth+'px'+';'+'width:'+picHeigth+'px;'" scale="true" @scale="scaler">
->>>>>>> Stashed changes
 			
-		</view>
+		</movable-view>
+		</movable-area>
+		
 	</view>
-	<view class="foot-Img" @tap="">
-		<img src="/static/footer.png" alt="">
+	<img class="downLoad" src="/static/dowload.png" alt="" v-if="imgOnShow">
+	
+	<view class="foot-Img" >
+		<img width="100%" height="100%" src="/static/footer.png" alt="">
+		<p class="word_bottom">上海体育学院</p>
+	</view>
+	<view class="foot-ImgTwo"  v-if=false>
+		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
+			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
+		</view>
 	</view>
 </view>
 </template>
-
 <script>
 	export default {
 		data() {
 			return {
 				title: 'Hello',
 				imgSrc:'',
-<<<<<<< Updated upstream
-=======
 				imgBox:[
 					{
 						id:1,
@@ -103,15 +127,12 @@
 				imgMask:'/static/mask/kouzhao_mask.png',
 				imgKouzhao:'/static/kouzhao.png',
 				imgBack:'/static/back.png'
->>>>>>> Stashed changes
 			}
 		},
 		onLoad() {
 
 		},
 		methods: {
-<<<<<<< Updated upstream
-=======
 			noPullDown(selector) {
 			    //禁止页面拖动
 			    document.querySelector('body').addEventListener('touchmove', function (e) {
@@ -421,7 +442,7 @@
 					}).exec()
 				
 			},
->>>>>>> Stashed changes
+
 			edit(){
 				uni.navigateTo({
 					url:"edit?imgSrc="+imgSrc,
@@ -437,10 +458,8 @@
 					sourceType:['album'],
 					success:function(res){
 						_this.imgSrc= res.tempFilePaths;
-<<<<<<< Updated upstream
 						uni.navigateTo({
-							url: 'zhufu?imgSrc='+_this.imgSrc
-=======
+							url: 'zhufu?imgSrc='+_this.imgSrc})
 						_this.imgSrc1=_this.imgSrc[0];
 						_this.pageTwo=true;
 						_this.pageOne=false;
@@ -458,7 +477,6 @@
 								_this.drawImg()
 							}
 							
->>>>>>> Stashed changes
 						});
 					}
 				})
