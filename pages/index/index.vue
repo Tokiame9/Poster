@@ -11,7 +11,14 @@
 	<view class="button_save" @tap="saveImg()" v-if="pageTwo">
 		<p v-if="pageTwo">完成</p>
 	</view>
+
 	<view class="imgBox" >
+
+	<view class="sign_border"  v-if="pageTwo">
+		<p v-if="pageTwo">相框</p>
+	</view>
+	<view class="imgBox" :class="{'imgBox_mp':IfmpPro}">
+
 		<img v-if="imgOnShow" class="imgResult" :src="imgPath" alt="" @longpress="savePngImg" @tap.stop="hideImg">
 		<view class="pageOne" v-if="pageOne" @tap="upLoadImg()">
 			<img class="imgGui" src="/static/uploadGui.png" alt="" v-if="guideOnShow" @tap.stop="hideImg">
@@ -27,8 +34,13 @@
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
+
 			<view v-if="pageTwo" class="canvas-border"@longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd" >
 				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo">
+
+			<view v-if="pageTwo" class="canvas-border"@longtap.stop="saveImg()"  @touchstart.stop='start' @touchmove.stop="move" @touchend="moveEnd" >
+				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo" disable-scroll="true">
+
 				</canvas>
 			</view>
 		
@@ -44,6 +56,7 @@
 	</view>
 	<img class="downLoad" src="/static/dowload.png" alt="" v-if="imgOnShow">
 	
+
 	<view class="foot-Img" >
 		<img width="100%" height="100%" src="/static/footer.png" alt="">
 		<p class="word_bottom">上海体育学院</p>
@@ -52,6 +65,18 @@
 		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
 			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
 		</view>
+
+	<view class="foot-Img" v-if="pageThree">
+		<img width="100%" height="100%" src="/static/footer.png" alt="">
+		<p class="word_bottom">上海体育学院</p>
+	</view>
+	<view class="foot-ImgTwo"  v-if="pageTwo">
+		<view class="scroll_box">
+		<view v-for="item in imgBox" :key="item.id" class="imgBox_pre">
+			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
+		</view>
+		</view>
+
 	</view>
 </view>
 </template>
@@ -59,13 +84,25 @@
 	export default {
 		data() {
 			return {
-				title: 'Hello',
+				IfmpPro:false,
+				guideOnShow:true,
+				imgOnShow:false,
+				imgPath:'',
+				pageOne:true,
+				pageTwo:false,
+				pageThree:true,
+				boxWidth:0,
+				boxHeight:0,
 				imgSrc:'',
 				imgBox:[
 					{
 						id:1,
 						preImg:'/static/pre_border/1.png',
+
 						srcImg:'/static/0001.png'
+
+						srcImg:'/static/1.png'
+
 					},
 					{
 						id:2,
@@ -122,15 +159,36 @@
 				picWidth:100,
 				picHeigth:100,
 				filePath:'',
+
 				imgSrc2:'/static/0001.png',
 				canvas:{},
 				imgMask:'/static/mask/kouzhao_mask.png',
 				imgKouzhao:'/static/kouzhao.png',
 				imgBack:'/static/back.png'
+
+				imgSrc2:'/static/1.png',
+				canvas:{}
+
 			}
 		},
 		onLoad() {
-
+			// document.body.addEventListener('touchmove',function(e){
+			// 	e.preventDefault();
+			// },{passive:false});
+			// this.noPullDown(".foot-ImgTwo")
+			const type = uni.getSystemInfoSync().uniPlatform
+			if (type=="mp-weixin"){
+				this.IfmpPro=true;
+			}
+			let _this=this;
+			uni.getStorage({
+				key: 'guideUI',
+				success: function (res) {
+					_this.test()//页面加载时获取canvas容器宽高
+					_this.guideOnShow=false;
+					console.log('123')
+				}
+			});
 		},
 		methods: {
 			noPullDown(selector) {
@@ -201,14 +259,22 @@
 				this.drawImg()
 			},
 			hideImg(){
+
 				
 				this.guideOnShow=false;
 				this.drawImg();
+
+				this.guideOnShow=false;
+
 			},
 			//画布
 			drawImg(){
 				let _this=this
 				var canvas= uni.createCanvasContext("firstCanvas")
+
+
+				
+
 				uni.getImageInfo({
 					src:_this.imgSrc2,
 					success:function(res){
@@ -237,6 +303,7 @@
 												// 	height:this.picHeigth+'px'
 												// }
 												canvas.clearRect(0,0,_this.boxWidth,_this.boxHeight)
+
 												// canvas.setFillStyle('#fff')
 												// canvas.fillRect(0,0,deviceW,deviceH)
 												
@@ -253,6 +320,12 @@
 												// canvas.fillStyle("#fff")
 												canvas.fillStyle="#fff"
 												canvas.fillText("秦若洋",20,deviceH-20)
+
+												canvas.setFillStyle('#fff')
+												canvas.fillRect(0,0,deviceW,deviceH)
+												canvas.drawImage(_this.imgSrc1,0,0,srcW1,srcH1,_this.posX,_this.posY,srcW_p1*_this.scaleSize,srcH_p1*_this.scaleSize)
+												canvas.drawImage(_this.imgSrc2,0,0,srcW2,srcH2,0,0,deviceW,deviceH)
+
 												canvas.draw()
 												_this.canvas=canvas
 											}
@@ -288,7 +361,11 @@
 								that.saveIf=true;
 							},
 							fail:function(){
+
 								that.saveIf=true;
+
+								thar.saveIf=true;
+
 							}
 							
 						})
@@ -319,12 +396,20 @@
 									}
 								},
 								fail:function(){
+
 									that.saveIf=true;
+
+									thar.saveIf=true;
+
 								}
 							})
 						}
 						
+
 					that.saveIf=true;
+
+					thar.saveIf=true;
+
 					}
 				})
 			},
@@ -384,7 +469,11 @@
 										});
 									},
 									fail:function(){
+
 										that.saveIf=true;
+
+										thar.saveIf=true;
+
 									}
 									
 								})
@@ -414,12 +503,20 @@
 											}
 										},
 										fail:function(){
+
 											that.saveIf=true;
+
+											thar.saveIf=true;
+
 										}
 									})
 								}
 								
+
 							that.saveIf=true;
+
+							thar.saveIf=true;
+
 							}
 						})
 					},
@@ -438,15 +535,33 @@
 						this.boxHeight=data.height;
 						console.log(this.boxWidth)
 						console.log(this.boxHeight)
+
 						this.posY=data.height/2;
 					}).exec()
 				
 			},
-
 			edit(){
 				uni.navigateTo({
 					url:"edit?imgSrc="+imgSrc,
 				})
+			},
+			savePicture(base64) {
+				var arr = base64.split(',');
+				var bytes = atob(arr[1]);
+				let ab = new ArrayBuffer(bytes.length);
+				let ia = new Uint8Array(ab);
+				for (let i = 0; i < bytes.length; i++) {
+					ia[i] = bytes.charCodeAt(i);
+				}
+				var blob = new Blob([ab], { type: 'application/octet-stream' });
+				var url = URL.createObjectURL(blob);
+				var a = document.createElement('a');
+				a.href = url;
+				a.download = new Date().valueOf() + ".png";
+				var e = document.createEvent('MouseEvents');
+				e.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+				a.dispatchEvent(e);
+				URL.revokeObjectURL(url);
 			},
 			upLoadImg(){
 				
@@ -457,27 +572,41 @@
 					sizeType:['original'],
 					sourceType:['album'],
 					success:function(res){
+						_this.test()
 						_this.imgSrc= res.tempFilePaths;
+
 						uni.navigateTo({
 							url: 'zhufu?imgSrc='+_this.imgSrc})
+
 						_this.imgSrc1=_this.imgSrc[0];
 						_this.pageTwo=true;
 						_this.pageOne=false;
 						_this.guideOnShow=true;
 						_this.pageThree=false;
+
 						_this.drawImg();
+
+						_this.drawImg()
+
 						uni.getStorage({
 							key: 'guideUI',
 							success: function (res) {
 								_this.guideOnShow=false;
+
 								_this.drawImg()
 								console.log('123')
 							},
 							fail: function(res){
 								_this.drawImg()
 							}
+
+								console.log('123')
+							},
+
 							
 						});
+						
+						_this.drawImg()
 					}
 				})
 			}
@@ -486,17 +615,93 @@
 </script>
 
 <style>
+	.scroll_box{
+		display: flex;
+		flex-direction: row;
+		
+	}
+	.imgGui{
+		position: absolute;
+		z-index: 99999;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+	}
+	.downLoad{
+		width: 140px;
+		height: 29px;
+		user-select: none;
+		position: absolute;
+		left: 50%;
+		transform: translate(-70px,0);
+		bottom: 9%;
+	}
+	.downLoad image{
+		
+	}
+	.pageOne{
+		background-color: #fff;
+		height: 100%;
+		border: 6px solid #ff8826;
+
+		border-radius: 10px;
+	}
+	.resImgBox{
+		z-index: 99999;
+		display: flex;
+		position: absolute;
+		align-items: center;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(16, 16, 16, 0.6);
+	}
+	.imgResult{
+		z-index: 9999;
+		width: 100%;
+top: 0;
+left: 0;
+	}
+	.word_bottom{
+		text-align: center;
+		width: 100%;
+		position: absolute;
+		bottom: 15%;
+		color: #fff;
+	}
+	.word{
+		left: 0;
+		height: 20px;
+		border-radius: 10px;
+		border-bottom: 6px solid #f1d272;
+		width: 100%;
+		bottom: -16px;
+		position: absolute;
+	}
+	.word p{
+		font-size: 20px;
+		font-weight: 900;
+		color: #ff8826;
+		text-align: center;
+		width: 100%;
+	}
 	.shu{
-		margin: 150px auto;
+		position: absolute;
+		transform: translate(-2.5px,-35px);
+		left: 50%;
+		top: 50%;
 		width: 0px;
 		height: 70px;
-		border: 2px solid #ff8826;
+		border-left: 5px solid #ff8826;
 	}
 	.heng{
-		margin: -187px auto;
+		position: absolute;
+		transform: translate(-35px,-2.5px);
+		left: 50%;
+		top: 50%;
 		width: 70px;
 		height: 0px;
-		border: 2px solid #ff8826;
+		border-top: 5px solid #ff8826;
 	}
 	page{
 		height: 100%;
@@ -507,23 +712,32 @@
 	}
 	.imgBox{
 		position: relative;
-		top: 40px;
-		background-color: #fff;
+		top: 5%;
 		margin: 0 auto;
 		border-radius: 6px;
-		width: 300px;
-		height: 430px;
-		border: 5px solid #ff8826;
+		width: 44.218vh;
+		height: 76.61vh;
+		background-color: #fff;
 	}
-image{
-	width: 100%;
-}
+	.imgBox_mp{
+		position: relative;
+		top: 9%;
+		margin: 0 auto;
+		border-radius: 6px;
+		width: 40.218vh;
+		height: 68.61vh;
+		background-color: #fff;
+	}
+
 .foot-Img{
-	background-color: #b01f24;
 	position: fixed;
 	bottom: 0;
-	height: 100px;
+	height:10%;
 	width: 100%;
+}
+.foot-Img image{
+	width: 100%;
+	height: 100%;
 }
 	.logo {
 		height: 200rpx;
@@ -542,5 +756,140 @@ image{
 	.title {
 		font-size: 36rpx;
 		color: #8f8f94;
+	}
+	.button_back{
+			z-index: 1;
+			width:70px;
+			height: 40px;
+			background-color: #ff6a05;
+			position: absolute;
+			left: -2px;
+			top: 80px;
+			border-top-right-radius: 25px;
+			border-bottom-right-radius: 25px;
+			border-left: 0px;
+			border: 2px solid #feedcb;
+		}
+		.button_back p{
+			color: #fff;
+			margin-left: 10px;
+			line-height: 40px;
+		}
+		.button_save{
+			color: #fff;
+				z-index: 1;
+				width:70px;
+				height: 40px;
+				background-color: #ff6a05;
+				position: absolute;
+				right: -2px;
+				bottom: 100px;
+				border-top-left-radius: 25px;
+				border-bottom-left-radius: 25px;
+				border-left: 0px;
+				border: 2px solid #feedcb;
+			}
+			.button_save p{
+				margin-left: 10px;
+				line-height: 40px;
+			}
+			.sign_border p{
+				font-size: 2.5vh;
+				line-height: 5.6vh;
+				text-align: center;
+				font-weight: 900;
+				text-shadow: #f1d272 1px 0 0, #f1d272 0 1px 0, #f1d272 -1px 0 0, #f1d272 0 -1px 0;
+			}
+			.sign_border{
+					color: #000;
+						z-index: 1;
+						width:70px;
+						height: 5.6vh;
+						background-color: #feebed;
+						position: absolute;
+						left: 0;
+						bottom: 100px;
+						border-top-left-radius: 15px;
+						border-top-right-radius: 15px;
+						border: 4px solid #f1d272;
+						border-bottom: none;
+					
+			}
+		.canvas-border{
+			
+			margin: 0 auto;
+			height: 100%;
+			height: 100%;
+		}
+		.enlarge{
+			z-index: 998;
+			width: 100%;
+			height: 100%;
+		}
+		.backImg{
+			opacity: 0;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			right: 0;
+		}
+		.foot-ImgTwo{
+			overflow: auto;
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			background-color: #feebed;
+			border-top: 5.6vh solid #ffe0cc;
+			position: fixed;
+			bottom: 0;
+			height: 100px;
+			width: 100%;
+		}
+		.moveImg{
+			z-index: 1;
+			
+		}
+		.moveAre{
+			border-radius: 10px;
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+		}
+		.fontImg{
+			top: 0;
+			left: 0;
+			position: absolute;
+			height: 100%;
+			width: 100%;
+		}
+		page{
+			width: 100%;
+			height: 100%;
+		}
+		.canvas-content{
+			background-color: #feebed;
+			width: 100%;
+			height: 100%;
+		}
+		.imgBox_pre{
+			margin-left: 40px;
+			width: 70px;
+			height: 70px;
+		}
+		.imgBox_pre img{
+			width: 100%;
+			height: 100%;
+		}
+		.coverLayer{
+			z-index: 9999;
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.6);
+		}
+	canvas{
+		width:100%;
+		height:100%
 	}
 </style>

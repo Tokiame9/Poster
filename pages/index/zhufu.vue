@@ -1,9 +1,15 @@
 <template>
-	<view class="canvas-content" @longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd">
+	<view class="canvas-content" >
 		<movable-area class="moveAre" scale-area="true" >
-		<canvas canvas-id="firstCanvas" @longpress="saveImg()">
-			
-		</canvas>
+			<view class="button_back" @tap="back">
+				<p>返回</p>
+			</view>
+			<view class="canvas-border"@longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd" >
+				<canvas canvas-id="firstCanvas" @longpress="saveImg()">
+					
+				</canvas>
+			</view>
+		
 		<!-- <movable-view damping="10000" animation="false"  @change="drawUpdata" class="moveImg max" :style="'height:'+picWidth+'px'+';'+'width:'+picHeigth+'px;'" direction="all">
 			
 		</movable-view> -->
@@ -11,9 +17,13 @@
 		<movable-view animation="false" calss="enlarge" :style="'height:'+picWidth+'px'+';'+'width:'+picHeigth+'px;'" scale="true" @scale="scaler">
 			
 		</movable-view>
-		
 		</movable-area>
-		<p style="position: absolute;top: 0;">长按保存图片</p>
+		
+		<view class="foot-Img" @tap="">
+			<view v-for="item in imgBox" class="imgBox">
+				<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
+			</view>
+		</view>
 	</view>
 </template>
 
@@ -21,6 +31,20 @@
 	export default {
 		data() {
 			return {
+				imgBox:[
+					{
+						preImg:'/static/pre_border/1.png',
+						srcImg:'/static/1.png'
+					},
+					{
+						preImg:'/static/pre_border/2.png',
+						srcImg:'/static/2.png'
+					},
+					{
+						preImg:'/static/pre_border/3.png',
+						srcImg:'/static/3.png'
+					}
+				],
 				saveIf:true,//存储触发时避免触发其他按压事件
 				posStartX:0,//按下时记录的起始的位置X 下同
 				posStartY:0,
@@ -36,14 +60,27 @@
 				// picWidth:100,
 				// picHeigth:100,
 				// filePath:'',
-				imgSrc2:'/static/2.png',
+				imgSrc2:'/static/1.png',
 			}
 		},
 		onLoad:function(option){
+			const query=uni.createSelectorQuery().in(this);
+			query.select('')
 			this.imgSrc1=option.imgSrc
 			this.drawImg();
 		},
 		methods: {
+			back(){
+				uni.navigateBack({
+					delta:1
+				})
+			},
+			switchImg(src){
+				this.saveIf=false;
+				this.imgSrc2=src;
+				this.drawImg();
+				this.saveIf=true;
+			},
 			//缩放计算倍率
 			scaler(e){ 
 				let evt=e;
@@ -95,8 +132,8 @@
 										uni.getSystemInfo({
 											success:function(res){
 
-												let deviceW=res.windowWidth
-												let deviceH=res.windowHeight //获取设备宽高
+												let deviceW=319
+												let deviceH=567 //获取设备宽高
 												let srcW_p1= srcW1
 												let srcH_p1= srcH1
 												if(srcW1>deviceW){
@@ -130,6 +167,9 @@
 			},
 			//小程序保存canvas图像
 			saveImg(){
+				if(this.saveIf==false){
+					return
+				}
 				this.saveIf=false;
 				let that=this
 				uni.showLoading({
@@ -191,6 +231,29 @@
 </script>
 
 <style>
+	.button_back{
+		z-index: 999;
+		width:70px;
+		height: 40px;
+		background-color: #ffe0cc;
+		position: absolute;
+		left: 0;
+		top: 80px;
+		border-top-right-radius: 25px;
+		border-bottom-right-radius: 25px;
+		border-left: 0px;
+		border: 2px solid #fff;
+	}
+	.button_back p{
+		margin-left: 10px;
+		line-height: 40px;
+	}
+	.canvas-border{
+		
+		margin: 60px auto;
+		height: 567px;
+		width: 319px;
+	}
 	.enlarge{
 		width: 100%;
 		height: 100%;
@@ -202,6 +265,18 @@
 		position: absolute;
 		left: 0;
 		right: 0;
+	}
+	.foot-ImgTwo{
+		display: flex;
+		flex-direction: row;
+		justify-content: space-around;
+		align-items: center;
+		background-color: #feebed;
+		border-top: 3px solid #ffe0cc;
+		position: fixed;
+		bottom: 0;
+		height: 80px;
+		width: 100%;
 	}
 	.moveImg{
 		z-index: 1;
@@ -224,9 +299,15 @@
 		height: 100%;
 	}
 	.canvas-content{
+		background-color: #feebed;
 		width: 100%;
 		height: 100%;
 	}
+	.imgBox_pre{
+		width: 70px;
+		height: 70px;
+	}
+	
 canvas{
 	width:100%;
 	height:100%
