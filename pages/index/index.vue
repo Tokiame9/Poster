@@ -48,10 +48,12 @@
 		<img width="100%" height="100%" src="/static/footer.png" alt="">
 		<p class="word_bottom">上海体育学院</p>
 	</view>
-	<view class="foot-ImgTwo"  v-if=false>
+	<view class="foot-ImgTwo"  v-if="this.pageTwo">
+		<uni-view class="scroll_box">
 		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
 			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
 		</view>
+		</uni-view>
 	</view>
 </view>
 </template>
@@ -99,11 +101,21 @@
 				picHeigth:100,
 				filePath:'',
 				imgSrc2:'/static/1.png',
-				canvas:{}
+				canvas:{},
+				imgBack:'/static/back.png',
+				imgKouzhao:'/static/kouzhao.png',
+				imgMask:'/static/mask/kouzhao_mask.png'
 			}
 		},
 		onLoad() {
 			this.test()
+			if(this.posY==0){
+				if(this.boxHeight==0)
+				{}
+				else{
+					this.posY=this.boxHeight/2;
+				}
+			}
 			let _this=this;
 			uni.getStorage({
 				key: 'guideUI',
@@ -167,6 +179,13 @@
 			},
 			//画布
 			drawImg(){
+				if(this.posY==0){
+					if(this.boxHeight==0)
+					{}
+					else{
+						this.posY=this.boxHeight/2;
+					}
+				}
 				let _this=this
 				var canvas= uni.createCanvasContext("firstCanvas")
 				uni.getImageInfo({
@@ -199,7 +218,18 @@
 												canvas.setFillStyle('#fff')
 												canvas.fillRect(0,0,deviceW,deviceH)
 												canvas.drawImage(_this.imgSrc1,0,0,srcW1,srcH1,_this.posX,_this.posY,srcW_p1*_this.scaleSize,srcH_p1*_this.scaleSize)
+												// canvas.globalCompositeOperation="destination-in"
+												// canvas.drawImage(_this.imgMask,0,0,500,320,deviceW/2-125,deviceH/2-80,250,160)
+												canvas.globalCompositeOperation="source-over"
 												canvas.drawImage(_this.imgSrc2,0,0,srcW2,srcH2,0,0,deviceW,deviceH)
+												// canvas.drawImage(_this.imgKouzhao,0,0,500,320,deviceW/2-125,deviceH/2-80,250,160)
+												canvas.globalCompositeOperation="destination-atop"
+												canvas.drawImage(_this.imgBack,0,0,srcW2,srcH2,0,0,deviceW,deviceH)
+												canvas.globalCompositeOperation="source-over"
+												canvas.font="bold 30px Arial"
+												// canvas.fillStyle("#fff")
+												canvas.fillStyle="#fff"
+												canvas.fillText("秦若洋",20,deviceH-20)
 												canvas.draw()
 												_this.canvas=canvas
 											}
@@ -624,16 +654,16 @@ left: 0;
 			right: 0;
 		}
 		.foot-ImgTwo{
-			display: flex;
-			flex-direction: row;
-			justify-content: space-around;
-			align-items: center;
-			background-color: #feebed;
-			border-top: 3px solid #ffe0cc;
-			position: fixed;
-			bottom: 0;
-			height: 80px;
-			width: 100%;
+			    overflow: auto;
+			    display: flex;
+			    flex-direction: row;
+			    align-items: center;
+			    background-color: #feebed;
+			    border-top: 5.6vh solid #ffe0cc;
+			    position: fixed;
+			    bottom: 0;
+			    height: 100px;
+			    width: 100%;
 		}
 		.moveImg{
 			z-index: 1;
@@ -662,8 +692,9 @@ left: 0;
 			height: 100%;
 		}
 		.imgBox_pre{
-			width: 70px;
-			height: 70px;
+			margin-left: 40px;
+			    width: 70px;
+			    height: 70px;
 		}
 		.imgBox_pre img{
 			width: 100%;
@@ -676,6 +707,10 @@ left: 0;
 			height: 100%;
 			background-color: rgba(0, 0, 0, 0.6);
 		}
+		.scroll_box{
+		    display: flex;
+		    flex-direction: row;
+			}
 	canvas{
 		width:100%;
 		height:100%
