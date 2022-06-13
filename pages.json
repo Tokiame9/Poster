@@ -3,9 +3,13 @@
 		{
 			"path": "pages/index/index",
 			"style": {
+<<<<<<< HEAD
 				"navigationBarTitleText": "uni-app",
 				"navigationBarTitleText": "毕业海报合成",
 				"allowsBounceVertical": "NO"
+=======
+				"navigationBarTitleText": "uni-app"
+>>>>>>> parent of a9f3157 (mask_fun)
 			}
 		}
 	    ,{
@@ -29,7 +33,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "毕业海报合成",
+		"navigationBarTitleText": "uni-app",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8",
 		"navigationStyle":"custom"

@@ -24,6 +24,7 @@
 			<view class="word" @click="test" v-if="pageOne">
 			</view>
 		</view>
+<<<<<<< HEAD
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
@@ -37,6 +38,9 @@
 		</movable-view> -->
 		
 		<movable-view v-if="pageTwo" animation="false" calss="enlarge" :style="'height:'+picWidth+'px'+';'+'width:'+picHeigth+'px;'" scale="true" @scale="scaler">
+=======
+		<view class="heng">
+>>>>>>> parent of a9f3157 (mask_fun)
 			
 		</movable-view>
 		</movable-area>
@@ -69,6 +73,7 @@
 				boxWidth:0,
 				boxHeight:0,
 				imgSrc:'',
+<<<<<<< HEAD
 				imgBox:[
 					{
 						id:1,
@@ -139,6 +144,8 @@
 				imgKouzhao:'/static/kouzhao.png',
 				imgBack:'/static/back.png',
 				canvas:{}
+=======
+>>>>>>> parent of a9f3157 (mask_fun)
 			}
 		},
 		onLoad() {
@@ -161,6 +168,7 @@
 			});
 		},
 		methods: {
+<<<<<<< HEAD
 			noPullDown(selector) {
 			    //禁止页面拖动
 			    document.querySelector('body').addEventListener('touchmove', function (e) {
@@ -510,6 +518,8 @@
 					}).exec()
 				
 			},
+=======
+>>>>>>> parent of a9f3157 (mask_fun)
 			edit(){
 				uni.navigateTo({
 					url:"edit?imgSrc="+imgSrc,
@@ -534,6 +544,7 @@
 				URL.revokeObjectURL(url);
 			},
 			upLoadImg(){
+<<<<<<< HEAD
 							var _this=this;
 							uni.chooseImage({
 								count:1,
@@ -558,6 +569,21 @@
 								}
 							})
 						}
+=======
+				var _this=this;
+				uni.chooseImage({
+					count:1,
+					sizeType:['original'],
+					sourceType:['album'],
+					success:function(res){
+						_this.imgSrc= res.tempFilePaths;
+						uni.navigateTo({
+							url: 'zhufu?imgSrc='+_this.imgSrc
+						});
+					}
+				})
+			}
+>>>>>>> parent of a9f3157 (mask_fun)
 		}
 	}
 </script>
