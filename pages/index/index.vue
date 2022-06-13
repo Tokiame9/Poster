@@ -25,6 +25,7 @@
 			</view>
 		</view>
 <<<<<<< HEAD
+<<<<<<< HEAD
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
@@ -38,6 +39,9 @@
 		</movable-view> -->
 		
 		<movable-view v-if="pageTwo" animation="false" calss="enlarge" :style="'height:'+picWidth+'px'+';'+'width:'+picHeigth+'px;'" scale="true" @scale="scaler">
+=======
+		<view class="heng">
+>>>>>>> parent of a9f3157 (mask_fun)
 =======
 		<view class="heng">
 >>>>>>> parent of a9f3157 (mask_fun)
@@ -73,6 +77,7 @@
 				boxWidth:0,
 				boxHeight:0,
 				imgSrc:'',
+<<<<<<< HEAD
 <<<<<<< HEAD
 				imgBox:[
 					{
@@ -146,6 +151,8 @@
 				canvas:{}
 =======
 >>>>>>> parent of a9f3157 (mask_fun)
+=======
+>>>>>>> parent of a9f3157 (mask_fun)
 			}
 		},
 		onLoad() {
@@ -168,6 +175,7 @@
 			});
 		},
 		methods: {
+<<<<<<< HEAD
 <<<<<<< HEAD
 			noPullDown(selector) {
 			    //禁止页面拖动
@@ -520,6 +528,8 @@
 			},
 =======
 >>>>>>> parent of a9f3157 (mask_fun)
+=======
+>>>>>>> parent of a9f3157 (mask_fun)
 			edit(){
 				uni.navigateTo({
 					url:"edit?imgSrc="+imgSrc,
@@ -544,6 +554,7 @@
 				URL.revokeObjectURL(url);
 			},
 			upLoadImg(){
+<<<<<<< HEAD
 <<<<<<< HEAD
 							var _this=this;
 							uni.chooseImage({
@@ -570,6 +581,8 @@
 							})
 						}
 =======
+=======
+>>>>>>> parent of a9f3157 (mask_fun)
 				var _this=this;
 				uni.chooseImage({
 					count:1,
