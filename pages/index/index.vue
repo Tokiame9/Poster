@@ -11,14 +11,7 @@
 	<view class="button_save" @tap="saveImg()" v-if="pageTwo">
 		<p v-if="pageTwo">完成</p>
 	</view>
-
 	<view class="imgBox" >
-
-	<view class="sign_border"  v-if="pageTwo">
-		<p v-if="pageTwo">相框</p>
-	</view>
-	<view class="imgBox" :class="{'imgBox_mp':IfmpPro}">
-
 		<img v-if="imgOnShow" class="imgResult" :src="imgPath" alt="" @longpress="savePngImg" @tap.stop="hideImg">
 		<view class="pageOne" v-if="pageOne" @tap="upLoadImg()">
 			<img class="imgGui" src="/static/uploadGui.png" alt="" v-if="guideOnShow" @tap.stop="hideImg">
@@ -34,13 +27,8 @@
 		
 		<movable-area class="moveAre" :scale-area="pageTwo" v-if="pageTwo">
 			<img class="imgGui" v-if="guideOnShow" src="/static/canvasGui.png" alt="" @tap.stop="hideImg">
-
 			<view v-if="pageTwo" class="canvas-border"@longtap="saveImg()" @touchstart='start' @touchmove="move" @touchend="moveEnd" >
 				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo">
-
-			<view v-if="pageTwo" class="canvas-border"@longtap.stop="saveImg()"  @touchstart.stop='start' @touchmove.stop="move" @touchend="moveEnd" >
-				<canvas canvas-id="firstCanvas" @longpress="saveImg()" v-if="pageTwo" disable-scroll="true">
-
 				</canvas>
 			</view>
 		
@@ -56,7 +44,6 @@
 	</view>
 	<img class="downLoad" src="/static/dowload.png" alt="" v-if="imgOnShow">
 	
-
 	<view class="foot-Img" >
 		<img width="100%" height="100%" src="/static/footer.png" alt="">
 		<p class="word_bottom">上海体育学院</p>
@@ -65,18 +52,6 @@
 		<view v-for="item in imgBox" :key="item.preImg" class="imgBox_pre">
 			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
 		</view>
-
-	<view class="foot-Img" v-if="pageThree">
-		<img width="100%" height="100%" src="/static/footer.png" alt="">
-		<p class="word_bottom">上海体育学院</p>
-	</view>
-	<view class="foot-ImgTwo"  v-if="pageTwo">
-		<view class="scroll_box">
-		<view v-for="item in imgBox" :key="item.id" class="imgBox_pre">
-			<img :src="item.preImg" alt="" @tap="switchImg(item.srcImg)">
-		</view>
-		</view>
-
 	</view>
 </view>
 </template>
@@ -100,8 +75,6 @@
 						preImg:'/static/pre_border/1.png',
 
 						srcImg:'/static/0001.png'
-
-						srcImg:'/static/1.png'
 
 					},
 					{
@@ -164,11 +137,8 @@
 				canvas:{},
 				imgMask:'/static/mask/kouzhao_mask.png',
 				imgKouzhao:'/static/kouzhao.png',
-				imgBack:'/static/back.png'
-
-				imgSrc2:'/static/1.png',
+				imgBack:'/static/back.png',
 				canvas:{}
-
 			}
 		},
 		onLoad() {
@@ -564,52 +534,30 @@
 				URL.revokeObjectURL(url);
 			},
 			upLoadImg(){
-				
-				var _this=this;
-				_this.drawImg()
-				uni.chooseImage({
-					count:1,
-					sizeType:['original'],
-					sourceType:['album'],
-					success:function(res){
-						_this.test()
-						_this.imgSrc= res.tempFilePaths;
-
-						uni.navigateTo({
-							url: 'zhufu?imgSrc='+_this.imgSrc})
-
-						_this.imgSrc1=_this.imgSrc[0];
-						_this.pageTwo=true;
-						_this.pageOne=false;
-						_this.guideOnShow=true;
-						_this.pageThree=false;
-
-						_this.drawImg();
-
-						_this.drawImg()
-
-						uni.getStorage({
-							key: 'guideUI',
-							success: function (res) {
-								_this.guideOnShow=false;
-
-								_this.drawImg()
-								console.log('123')
-							},
-							fail: function(res){
-								_this.drawImg()
-							}
-
-								console.log('123')
-							},
-
-							
-						});
-						
-						_this.drawImg()
-					}
-				})
-			}
+							var _this=this;
+							uni.chooseImage({
+								count:1,
+								sizeType:['original'],
+								sourceType:['album'],
+								success:function(res){
+									_this.test()
+									_this.imgSrc= res.tempFilePaths;
+									_this.imgSrc_upload=_this.imgSrc[0];
+									_this.pageTwo=true;
+									_this.pageOne=false;
+									_this.guideOnShow=true;
+									uni.getStorage({
+										key: 'guideUI',
+										success: function (res) {
+											_this.guideOnShow=false;
+											console.log('123')
+										}
+									});
+									
+									_this.drawImg()
+								}
+							})
+						}
 		}
 	}
 </script>
