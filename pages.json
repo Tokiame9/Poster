@@ -3,7 +3,12 @@
 		{
 			"path": "pages/index/index",
 			"style": {
+<<<<<<< Updated upstream
 				"navigationBarTitleText": "uni-app"
+=======
+				"navigationBarTitleText": "毕业海报合成",
+				"allowsBounceVertical": "NO"
+>>>>>>> Stashed changes
 			}
 		}
 	    ,{
@@ -27,7 +32,7 @@
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "毕业海报合成",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	}
